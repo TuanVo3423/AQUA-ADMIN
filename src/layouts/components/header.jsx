@@ -18,8 +18,24 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Link } from 'react-router-dom';
+import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 const drawerWidth = 240;
+
+const data = [
+  {
+    title : 'View Overall',
+    path : '/',
+    icon : <CalendarViewMonthIcon />
+  },
+  {
+    title : 'Create Product',
+    path : '/create',
+    icon : <CreateNewFolderIcon />
+  },
+]
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -116,7 +132,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            AQUA-ADMIN
           </Typography>
         </Toolbar>
       </AppBar>
@@ -128,8 +144,9 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+          {data.map((text, index) => (
+           <Link key={text.title} to={text.path} style={{color : '#000'}}>
+            <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -144,15 +161,15 @@ export default function MiniDrawer() {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {text.icon}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={text.title} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
-            </ListItem>
+            </ListItem></Link>
           ))}
         </List>
         <Divider />
-        <List>
+        {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
@@ -175,7 +192,7 @@ export default function MiniDrawer() {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
       
     </Box>

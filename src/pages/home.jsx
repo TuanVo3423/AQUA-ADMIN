@@ -21,32 +21,13 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { InterpreterModeOutlined } from '@mui/icons-material';
-
-function createData(ID, NAME, CATEGORY, PRICE, DESCRIPTION,BRAND , QUANTITY_SALE) {
-  return {
-    ID,
-    NAME,
-    CATEGORY,
-    PRICE,
-    DESCRIPTION,
-    BRAND,
-    QUANTITY_SALE,
-    
-  };
-}
-
-const rows = [
-  createData(1, 'Donut', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(2, 'Donut1', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(3, 'Donut2', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(4, 'Donut3', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(5, 'Donut4', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(6, 'Donut5', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(7, 'Donut6', 'Máy tính',7357345,'des 1','branch','note 1'),
-  createData(8, 'Donut7', 'Máy tính',7357345,'des 1','branch','note 1'),
-  
-];
+import { fetchProducts,deleteProducts } from '../api';
+import { SystemReducer } from '../redux/Reducers/System';
+import { useDispatch, useSelector } from 'react-redux';
+import EditProduct from '../components/EditProduct';
+import { systemSelector } from '../redux/Selector';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -98,28 +79,40 @@ const headCells = [
     label: 'CATEGORY',
   },
   {
+    id: 'SHORTDESCRIPTION',
+    numeric: true,
+    disablePadding: false,
+    label: 'SHORTDESCRIPTION',
+  },
+  {
+    id: 'DETAILDESCRIPTION',
+    numeric: true,
+    disablePadding: false,
+    label: 'DETAILDESCRIPTION',
+  },
+  {
     id: 'PRICE',
     numeric: true,
     disablePadding: false,
     label: 'PRICE',
   },
   {
-    id: 'DESCRIPTION',
+    id: 'ATTACHMENT',
     numeric: true,
     disablePadding: false,
-    label: 'DESCRIPTION',
+    label: 'ATTACHMENT',
   },
   {
-    id: 'BRAND',
+    id: 'LIKECOUNT',
     numeric: true,
     disablePadding: false,
-    label: 'BRAND',
+    label: 'LIKECOUNT',
   },
   {
-    id: 'QUANTITY SALE',
+    id: 'ISNEW',
     numeric: true,
     disablePadding: false,
-    label: 'QUANTITY SALE',
+    label: 'ISNEW',
   },
 ];
 
@@ -180,8 +173,50 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-
+  const dispatch = useDispatch();
+  const { numSelected , selected , listProduct } = props;
+  const [isOpenModalEdit,setIsOpenModalEdit] = React.useState(false);
+  const [values, setValues] = React.useState({
+    name: '',
+    category: "",
+    shortDescription: '',
+    detailDescription: '',
+    price: undefined,
+    attachment : '',
+    isNew : false,
+    likeCount : 0,
+  });
+  const handleDelete = async() => {
+    if(selected.length <=1) {
+      console.log('lam ne');
+      deleteProducts(selected[0]);
+      window.location.reload();
+    } 
+  }
+  const handleOpenEditModal = async() => {
+    if(selected.length <=1) {
+      const test = listProduct.find((item,index) => {
+        return item._id === selected[0];
+      });
+      console.log('test',test);
+      dispatch(SystemReducer.actions.setIsOpenModalEdit(test));
+      // setValues({
+      //   ...values,
+      //   name : test.name,
+      //   category : test.category,
+      //   shortDescription : test.shortDescription,
+      //   detailDescription : test.detailDescription,
+      //   price : test.price,
+      //   attachment : '',
+      //   isNew : test.isNew,
+      //   likeCount : test.likeCount,
+      // });
+      // setIsOpenModalEdit(true);
+    }
+  }
+  console.log('values', values,isOpenModalEdit);
+  // const test = handleOpenEditModal();
+  // console.log('test', test);
   return (
     <Toolbar
       sx={{
@@ -214,11 +249,18 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
+        <div style={{display : 'flex'}}>
+          <Tooltip title="Delete">
+          <IconButton onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title='Edit'>
+            <IconButton onClick={handleOpenEditModal}>
+                <ModeEditIcon />
+              </IconButton>
+        </Tooltip>
+        </div>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
@@ -235,13 +277,40 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable() {
+  const [listProduct,setListProduct] = React.useState([]);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('NAME');
   const [selected, setSelected] = React.useState([]);
   console.log('selected : ',selected);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  React.useEffect(() => {
+    fetchProducts()
+      .then(res => {
+        // console.log(res.data)
+        setListProduct(res.data.products);
+      })
+      .catch(error => console.log(error))
+
+  },[]);
+  console.log('listProduct',listProduct)
+
+  const handleDelete = async() => {
+    if(selected.length <=1) {
+      console.log('lam ne');
+      deleteProducts(selected[0]);
+    }
+  }
+
+  const data = useSelector(systemSelector);
+  console.log('data isOpenModalEdit : ',data.isOpenModalEdit);
+  
+  // const handleEdit = async() => {
+  //   if(selected.length <=1) {
+      
+  // }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -251,7 +320,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.ID);
+      const newSelected = listProduct.map((n) => n._id);
       console.log('newSelected',newSelected);
       setSelected(newSelected); 
       return;
@@ -296,12 +365,13 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listProduct.length) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar selected={selected} listProduct={listProduct} numSelected={selected.length} />
+       
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -314,25 +384,25 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={listProduct.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(listProduct, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.ID);
+                  const isItemSelected = isSelected(row._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.ID)}
+                      onClick={(event) => handleClick(event, row._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.ID}
+                      key={row._id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -350,15 +420,118 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.ID}
+                        <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                                maxWidth : '100px',
+                            }}
+                            variant="body1">
+                            {row._id}
+                        </Typography>
                       </TableCell>
-                      <TableCell align="right">{row.NAME}</TableCell>
-                      <TableCell align="right">{row.CATEGORY}</TableCell>
-                      <TableCell align="right">{row.PRICE}</TableCell>
-                      <TableCell align="right">{row.DESCRIPTION}</TableCell>
-                      <TableCell align="right">{row.BRAND}</TableCell>
-                      <TableCell align="right">{row.QUANTITY_SALE}</TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.category}  
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.shortDescription}
+                        </Typography>
+                      </TableCell>
+                      
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.detailDescription}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.price}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                maxWidth : '150px',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.attachment}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.likeCount}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                      <Typography
+                            sx={{
+                                display: '-webkit-box',
+                                overflow: 'hidden',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2,
+                            }}
+                            variant="body1">
+                            {row.isNew ? 'new' : 'old'}
+                        </Typography>
+                      </TableCell>
                     </TableRow>
+                    
                   );
                 })}
               {emptyRows > 0 && (
@@ -376,7 +549,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={listProduct.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -387,6 +560,8 @@ export default function EnhancedTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      {data.isOpenModalEdit && (<EditProduct /> )}
+        
     </Box>
   );
 }
