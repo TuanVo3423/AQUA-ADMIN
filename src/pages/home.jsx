@@ -244,7 +244,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          LIST PRODUCT
         </Typography>
       )}
 
@@ -504,7 +504,7 @@ export default function EnhancedTable() {
                             sx={{
                                 display: '-webkit-box',
                                 overflow: 'hidden',
-                                maxWidth : '150px',
+                                maxWidth : '100px',
                                 WebkitBoxOrient: 'vertical',
                                 WebkitLineClamp: 2,
                             }}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormControl, FormControlLabel, FormGroup, FormLabel, Modal, Radio, RadioGroup, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { Button, ClickAwayListener, FormControl, FormControlLabel, FormGroup, FormLabel, Modal, Radio, RadioGroup, TextareaAutosize, TextField, Typography } from '@mui/material';
 import FileBase64 from 'react-file-base64';
 // import { ModalEditState$ } from '../../redux/selectors';
 // import {EditPostReducer} from '../../redux/reducers/edit';
@@ -9,11 +9,17 @@ import {useSelector} from 'react-redux';
 import { systemSelector } from '../redux/Selector';
 import { useEffect } from 'react';
 import { updatePosts } from '../api';
+import CloseIcon from '@mui/icons-material/Close';
+import { SystemReducer } from '../redux/Reducers/System';
 
 export default function EditProduct() {
   const data = useSelector(systemSelector);
+  const dispatch = useDispatch(SystemReducer);
   // console.log('data isOpenModalEdit : ',data.isOpenModalEdit);
   // console.log('data  : ',data.data);
+  const handleClickAway = () => {
+    dispatch(SystemReducer.actions.reset());
+  }
   const [values, setValues] = React.useState({
     id : '',
     name: '',
@@ -47,7 +53,7 @@ export default function EditProduct() {
         position: 'absolute',
         display: 'flex',
         flexDirection: 'column',
-        gap : '5px',
+        gap : '2px',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -61,8 +67,10 @@ export default function EditProduct() {
   return (
     <div>
         <Modal open={data.isOpenModalEdit}>
+      <ClickAwayListener onClickAway={handleClickAway}>
              <FormGroup sx={style} >
-                <Typography variant='h5' align='center'>EDIT POST</Typography>
+                <Typography variant='h5' align='center'>EDIT PRODUCT</Typography>
+                <CloseIcon style={{position : 'absolute' , right : 0 , top : 0 , width : '50px' , height : '50px'}} onClick={handleClickAway} />
                 <FormLabel>
                     <TextField value={values.name} onChange={((e) => setValues({...values, name : e.target.value}))} fullWidth label='Enter name' variant='standard' />
                     <FormControl>
@@ -82,7 +90,7 @@ export default function EditProduct() {
                     <TextField fullWidth value={values.shortDescription} onChange={((e) => setValues({...values, shortDescription : e.target.value}))} label='Enter shortDescription' variant='standard' />
                 </FormLabel>
                 <TextareaAutosize
-                    minRows={10}
+                    minRows={5}
                     placeholder="Enter Detail description..."
                     style={{ width: '100%' , margin : '10px 0' , border: '1px solid #000' }}
                     value={values.detailDescription}
@@ -108,7 +116,7 @@ export default function EditProduct() {
                 <Button onClick={handleEdit} sx={{marginTop : '20px' , width : '100%'}} variant="contained" >SAVE CHANGE</Button>
                 </div>
              </FormGroup>
-             
+        </ClickAwayListener>
         </Modal>
     </div>
   )

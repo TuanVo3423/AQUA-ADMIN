@@ -32,20 +32,20 @@ export default function InputAdornments() {
   
 
 
-  const handleSubMit = () => {
-    createProducts(values);
-    setValues({
-      ...values,
-      name: '',
-      category: "cellphone",
-      shortDescription: '',
-      detailDescription: '',
-      price: undefined,
-      attachment : '',
-      isnew : false,
+  const handleSubMit = async() => {
+    await createProducts(values);
+    // setValues({
+    //   ...values,
+    //   name: '',
+    //   category: "cellphone",
+    //   shortDescription: '',
+    //   detailDescription: '',
+    //   price: undefined,
+    //   attachment : '',
+    //   isnew : false,
 
-    })
-    window.location.reload();
+    // })
+    await window.location.reload();
   }
 
   return (
