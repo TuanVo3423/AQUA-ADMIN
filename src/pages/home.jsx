@@ -277,6 +277,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable() {
+  const dispatch = useDispatch();
   const [listProduct,setListProduct] = React.useState([]);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('NAME');
@@ -286,12 +287,17 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   React.useEffect(() => {
+    dispatch(SystemReducer.actions.setIsLoading(true));
     fetchProducts()
       .then(res => {
         // console.log(res.data)
+        dispatch(SystemReducer.actions.reset());
         setListProduct(res.data.products);
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        dispatch(SystemReducer.actions.reset());
+        console.log(error);
+      })
 
   },[]);
   console.log('listProduct',listProduct)

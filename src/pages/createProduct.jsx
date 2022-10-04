@@ -45,6 +45,7 @@ export default function InputAdornments() {
       isnew : false,
 
     })
+    window.location.reload();
   }
 
   return (

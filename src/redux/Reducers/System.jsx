@@ -12,7 +12,14 @@ export const SystemReducer = createSlice({
     },
     reducers : {
         reset : (state,action) => {
-            state = state.initialState;
+            state.isLoading = false;
+            state.isError = false;
+            state.MessageAlert = undefined;
+            state.typeAlert = undefined;
+            state.isOpenModalEdit = false;
+        },
+        setIsLoading : (state,action) => {
+            state.isLoading = action.payload;
         },
         setIsOpenModalEdit : (state, action) => { 
             state.isOpenModalEdit = true;
