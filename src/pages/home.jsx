@@ -1,33 +1,33 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { InterpreterModeOutlined } from '@mui/icons-material';
-import { fetchProducts,deleteProducts } from '../api';
-import { SystemReducer } from '../redux/Reducers/System';
-import { useDispatch, useSelector } from 'react-redux';
-import EditProduct from '../components/EditProduct';
-import { systemSelector } from '../redux/Selector';
+import * as React from "react";
+import PropTypes from "prop-types";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { visuallyHidden } from "@mui/utils";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { InterpreterModeOutlined } from "@mui/icons-material";
+import { fetchProducts, deleteProducts } from "../api";
+import { SystemReducer } from "../redux/Reducers/System";
+import { useDispatch, useSelector } from "react-redux";
+import EditProduct from "../components/EditProduct";
+import { systemSelector } from "../redux/Selector";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -40,7 +40,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -61,64 +61,70 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'ID',
+    id: "ID",
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: "ID",
   },
   {
-    id: 'NAME',
+    id: "NAME",
     numeric: true,
     disablePadding: false,
-    label: 'NAME',
+    label: "NAME",
   },
   {
-    id: 'CATEGORY',
+    id: "CATEGORY",
     numeric: true,
     disablePadding: false,
-    label: 'CATEGORY',
+    label: "CATEGORY",
   },
   {
-    id: 'SHORTDESCRIPTION',
+    id: "SHORTDESCRIPTION",
     numeric: true,
     disablePadding: false,
-    label: 'SHORTDESCRIPTION',
+    label: "SHORTDESCRIPTION",
   },
   {
-    id: 'DETAILDESCRIPTION',
+    id: "DETAILDESCRIPTION",
     numeric: true,
     disablePadding: false,
-    label: 'DETAILDESCRIPTION',
+    label: "DETAILDESCRIPTION",
   },
   {
-    id: 'PRICE',
+    id: "PRICE",
     numeric: true,
     disablePadding: false,
-    label: 'PRICE',
+    label: "PRICE",
   },
   {
-    id: 'ATTACHMENT',
+    id: "ATTACHMENT",
     numeric: true,
     disablePadding: false,
-    label: 'ATTACHMENT',
+    label: "ATTACHMENT",
   },
   {
-    id: 'LIKECOUNT',
+    id: "LIKECOUNT",
     numeric: true,
     disablePadding: false,
-    label: 'LIKECOUNT',
+    label: "LIKECOUNT",
   },
   {
-    id: 'ISNEW',
+    id: "ISNEW",
     numeric: true,
     disablePadding: false,
-    label: 'ISNEW',
+    label: "ISNEW",
   },
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
+  const {
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -133,26 +139,26 @@ function EnhancedTableHead(props) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              "aria-label": "select all desserts",
             }}
           />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -167,38 +173,38 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
   const dispatch = useDispatch();
-  const { numSelected , selected , listProduct } = props;
-  const [isOpenModalEdit,setIsOpenModalEdit] = React.useState(false);
+  const { numSelected, selected, listProduct } = props;
+  const [isOpenModalEdit, setIsOpenModalEdit] = React.useState(false);
   const [values, setValues] = React.useState({
-    name: '',
+    name: "",
     category: "",
-    shortDescription: '',
-    detailDescription: '',
+    shortDescription: "",
+    detailDescription: "",
     price: undefined,
-    attachment : '',
-    isNew : false,
-    likeCount : 0,
+    attachment: "",
+    isNew: false,
+    likeCount: 0,
   });
-  const handleDelete = async() => {
-    if(selected.length <=1) {
-      console.log('lam ne');
+  const handleDelete = async () => {
+    if (selected.length <= 1) {
+      console.log("lam ne");
       deleteProducts(selected[0]);
       window.location.reload();
-    } 
-  }
-  const handleOpenEditModal = async() => {
-    if(selected.length <=1) {
-      const test = listProduct.find((item,index) => {
+    }
+  };
+  const handleOpenEditModal = async () => {
+    if (selected.length <= 1) {
+      const test = listProduct.find((item, index) => {
         return item._id === selected[0];
       });
-      console.log('test',test);
+      console.log("test", test);
       dispatch(SystemReducer.actions.setIsOpenModalEdit(test));
       // setValues({
       //   ...values,
@@ -213,8 +219,8 @@ const EnhancedTableToolbar = (props) => {
       // });
       // setIsOpenModalEdit(true);
     }
-  }
-  console.log('values', values,isOpenModalEdit);
+  };
+  console.log("values", values, isOpenModalEdit);
   // const test = handleOpenEditModal();
   // console.log('test', test);
   return (
@@ -224,13 +230,16 @@ const EnhancedTableToolbar = (props) => {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.activatedOpacity
+            ),
         }),
       }}
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -239,7 +248,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           variant="h6"
           id="tableTitle"
           component="div"
@@ -249,17 +258,17 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <div style={{display : 'flex'}}>
+        <div style={{ display: "flex" }}>
           <Tooltip title="Delete">
-          <IconButton onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Edit'>
+            <IconButton onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit">
             <IconButton onClick={handleOpenEditModal}>
-                <ModeEditIcon />
-              </IconButton>
-        </Tooltip>
+              <ModeEditIcon />
+            </IconButton>
+          </Tooltip>
         </div>
       ) : (
         <Tooltip title="Filter list">
@@ -278,57 +287,55 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const dispatch = useDispatch();
-  const [listProduct,setListProduct] = React.useState([]);
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('NAME');
+  const [listProduct, setListProduct] = React.useState([]);
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("NAME");
   const [selected, setSelected] = React.useState([]);
-  console.log('selected : ',selected);
+  console.log("selected : ", selected);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   React.useEffect(() => {
     dispatch(SystemReducer.actions.setIsLoading(true));
     fetchProducts()
-      .then(res => {
+      .then((res) => {
         // console.log(res.data)
         dispatch(SystemReducer.actions.reset());
         setListProduct(res.data.products);
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(SystemReducer.actions.reset());
         console.log(error);
-      })
+      });
+  }, []);
+  console.log("listProduct", listProduct);
 
-  },[]);
-  console.log('listProduct',listProduct)
-
-  const handleDelete = async() => {
-    if(selected.length <=1) {
-      console.log('lam ne');
+  const handleDelete = async () => {
+    if (selected.length <= 1) {
+      console.log("lam ne");
       deleteProducts(selected[0]);
     }
-  }
+  };
 
   const data = useSelector(systemSelector);
-  console.log('data isOpenModalEdit : ',data.isOpenModalEdit);
-  
+  console.log("data isOpenModalEdit : ", data.isOpenModalEdit);
+
   // const handleEdit = async() => {
   //   if(selected.length <=1) {
-      
+
   // }
 
-
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = listProduct.map((n) => n._id);
-      console.log('newSelected',newSelected);
-      setSelected(newSelected); 
+      console.log("newSelected", newSelected);
+      setSelected(newSelected);
       return;
     }
     setSelected([]);
@@ -347,7 +354,7 @@ export default function EnhancedTable() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -374,15 +381,19 @@ export default function EnhancedTable() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listProduct.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar selected={selected} listProduct={listProduct} numSelected={selected.length} />
-       
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <EnhancedTableToolbar
+          selected={selected}
+          listProduct={listProduct}
+          numSelected={selected.length}
+        />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -416,7 +427,7 @@ export default function EnhancedTable() {
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
-                            'aria-labelledby': labelId,
+                            "aria-labelledby": labelId,
                           }}
                         />
                       </TableCell>
@@ -427,117 +438,125 @@ export default function EnhancedTable() {
                         padding="none"
                       >
                         <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                                maxWidth : '100px',
-                            }}
-                            variant="body1">
-                            {row._id}
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                            maxWidth: "100px",
+                          }}
+                          variant="body1"
+                        >
+                          {row._id}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.name}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.name}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.category}  
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.category}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.shortDescription}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.shortDescription}
                         </Typography>
                       </TableCell>
-                      
+
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.detailDescription}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.price}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.detailDescription}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                maxWidth : '100px',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.attachment}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.price}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.likeCount}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            maxWidth: "100px",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.attachment}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                      <Typography
-                            sx={{
-                                display: '-webkit-box',
-                                overflow: 'hidden',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                            }}
-                            variant="body1">
-                            {row.isNew ? 'new' : 'old'}
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.likeCount}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography
+                          sx={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 2,
+                          }}
+                          variant="body1"
+                        >
+                          {row.isNew ? "new" : "old"}
                         </Typography>
                       </TableCell>
                     </TableRow>
-                    
                   );
                 })}
               {emptyRows > 0 && (
@@ -566,8 +585,7 @@ export default function EnhancedTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      {data.isOpenModalEdit && (<EditProduct /> )}
-        
+      {data.isOpenModalEdit && <EditProduct />}
     </Box>
   );
 }

@@ -1,5 +1,6 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector } from "@reduxjs/toolkit";
 export const systemSelector = (state) => state.system;
+export const ChatSelector = (state) => state.chat;
 // export const searchTextSelector = (state) => state.filters.search;
 // export const searchStatusSelector = (state) => state.filters.FilterByStatus;
 // export const searchPrioritySelector = (state) => state.filters.FilterByPriority;
