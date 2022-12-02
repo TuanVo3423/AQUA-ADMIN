@@ -116,7 +116,7 @@ export default function MiniDrawer() {
   const handleSignOut = () => {
     const cookies = new Cookies();
     cookies.remove("token");
-    window.location.href = "http://127.0.0.1:5174/";
+    window.location.href = "https://aqua-fe.vercel.app";
   };
 
   const handleDrawerOpen = () => {
