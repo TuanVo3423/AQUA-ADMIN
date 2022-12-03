@@ -24,6 +24,7 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import { Button } from "@mui/material";
 import Cookies from "universal-cookie";
 import { Chat } from "@mui/icons-material";
+import { FEUI } from "../../api";
 
 const drawerWidth = 240;
 
@@ -116,7 +117,7 @@ export default function MiniDrawer() {
   const handleSignOut = () => {
     const cookies = new Cookies();
     cookies.remove("token");
-    window.location.href = "https://aqua-fe.vercel.app";
+    window.location.href = FEUI;
   };
 
   const handleDrawerOpen = () => {

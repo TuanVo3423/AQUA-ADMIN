@@ -2,6 +2,7 @@ import { Avatar, Button, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { CircleSpinnerOverlay } from "react-spinner-overlay";
 import { getAllUsers } from "../api";
 import MessageBoard from "../components/MessageBoard";
 import UserItem from "../components/UserItem";
@@ -23,13 +24,10 @@ export default function chat() {
     setLoading(true);
     getAllUsers().then((res) => {
       setUsers(res.data.users);
+      setLoading(false);
     });
-    setLoading(false);
   }, []);
-  console.log("users", users);
-  if (loading) {
-    return <h1>Loading</h1>;
-  }
+
   return (
     <div
       style={{
@@ -39,6 +37,12 @@ export default function chat() {
         borderTop: "1px solid",
       }}
     >
+      {loading && (
+        <CircleSpinnerOverlay
+          loading={loading}
+          overlayColor="rgba(0,153,255,0.2)"
+        />
+      )}
       {/* left */}
       <div
         style={{ width: "20%", borderRight: "1px solid", overflowY: "hidden" }}
@@ -55,35 +59,37 @@ export default function chat() {
           <p>LIST USER</p>
         </div>
         {users.map((user, index) => {
-          return (
-            // && 'background : "red'
-            <div>
-              {Receiver === user._id ? (
-                <div
-                  style={{
-                    background: "#1976d2",
-                    color: "#fff",
-                    transition: "all 1s ease",
-                    cursor: "pointer",
-                  }}
-                  onClick={() =>
-                    handleChoose({ id: user._id, name: user.fullname })
-                  }
-                >
-                  <UserItem key={index} username={user.username} />
-                </div>
-              ) : (
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    handleChoose({ id: user._id, name: user.fullname })
-                  }
-                >
-                  <UserItem key={index} username={user.username} />
-                </div>
-              )}
-            </div>
-          );
+          if (!user.isAdmin) {
+            return (
+              // && 'background : "red'
+              <div key={index}>
+                {Receiver === user._id ? (
+                  <div
+                    style={{
+                      background: "#1976d2",
+                      color: "#fff",
+                      transition: "all 1s ease",
+                      cursor: "pointer",
+                    }}
+                    onClick={() =>
+                      handleChoose({ id: user._id, name: user.fullname })
+                    }
+                  >
+                    <UserItem key={index} username={user.username} />
+                  </div>
+                ) : (
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      handleChoose({ id: user._id, name: user.fullname })
+                    }
+                  >
+                    <UserItem key={index} username={user.username} />
+                  </div>
+                )}
+              </div>
+            );
+          }
         })}
       </div>
       {/* right */}
