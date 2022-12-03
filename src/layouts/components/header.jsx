@@ -116,7 +116,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const handleSignOut = () => {
     const cookies = new Cookies();
-    cookies.remove("token");
+    cookies.remove("token", { path: "/https://aqua-fe.vercel.app" });
     window.location.href = FEUI;
   };
 
