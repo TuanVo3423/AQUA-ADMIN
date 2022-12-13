@@ -194,7 +194,6 @@ const EnhancedTableToolbar = (props) => {
   });
   const handleDelete = async () => {
     if (selected.length <= 1) {
-      console.log("lam ne");
       deleteProducts(selected[0]);
       window.location.reload();
     }
@@ -204,7 +203,6 @@ const EnhancedTableToolbar = (props) => {
       const test = listProduct.find((item, index) => {
         return item._id === selected[0];
       });
-      console.log("test", test);
       dispatch(SystemReducer.actions.setIsOpenModalEdit(test));
       // setValues({
       //   ...values,
@@ -220,7 +218,7 @@ const EnhancedTableToolbar = (props) => {
       // setIsOpenModalEdit(true);
     }
   };
-  console.log("values", values, isOpenModalEdit);
+  // console.log("values", values, isOpenModalEdit);
   // const test = handleOpenEditModal();
   // console.log('test', test);
   return (
@@ -312,13 +310,13 @@ export default function EnhancedTable() {
 
   const handleDelete = async () => {
     if (selected.length <= 1) {
-      console.log("lam ne");
+      // console.log("lam ne");
       deleteProducts(selected[0]);
     }
   };
 
   const data = useSelector(systemSelector);
-  console.log("data isOpenModalEdit : ", data.isOpenModalEdit);
+  // console.log("data isOpenModalEdit : ", data.isOpenModalEdit);
 
   // const handleEdit = async() => {
   //   if(selected.length <=1) {

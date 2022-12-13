@@ -16,22 +16,22 @@ export default function MainLayout({ children, path }) {
     window.scrollTo(0, 0);
   }, [path]);
   return (
-    <Grid sx={{ marginLeft: "50px" }} spacing={2}>
+    <Grid sx={{ marginLeft: "70px" }}>
       <Grid sx={{ padding: 0 }} item xs={1}>
+        {isLoading && (
+          <>
+            <CircleSpinnerOverlay
+              loading={isLoading}
+              overlayColor="rgba(0,153,255,0.2)"
+            />
+          </>
+        )}
         <ButtonAppBar />
       </Grid>
       <Grid sx={{ padding: 0 }} item xs={11}>
         <div style={{ marginTop: "80px" }}>
           {children}
-          {isLoading && (
-            <>
-              <FerrisWheelSpinner loading={isLoading} size={28} />
-              <CircleSpinnerOverlay
-                loading={isLoading}
-                overlayColor="rgba(0,153,255,0.2)"
-              />
-            </>
-          )}
+
           {/* <EditProduct /> */}
         </div>
       </Grid>

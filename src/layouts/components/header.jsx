@@ -157,7 +157,7 @@ export default function MiniDrawer() {
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer sx={{ zIndex: 1 }} variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (

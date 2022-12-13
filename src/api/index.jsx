@@ -8,8 +8,8 @@ export const FEUI = "https://aqua-fe.vercel.app";
 export const fetchProducts = (payload) => axios.get(`${URL}/admin`);
 
 export const createProducts = (payload) => {
-  console.log("payload : ", payload);
-  axios.post(`${URL}/products/createPost`, payload);
+  // console.log("payload : ", payload);
+  return axios.post(`${URL}/products/createPost`, payload);
 };
 
 export const updatePosts = (payload) =>

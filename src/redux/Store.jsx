@@ -14,9 +14,11 @@ const store = configureStore({
     // account : AccountReducer.reducer,
     // product : ProductReducer.reducer,
   },
-  ...getDefaultMiddleware({
-    serializableCheck: false,
-  }),
+  middleware: [
+    ...getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+  ],
 });
 // sagaMiddleware.run(rootSaga);
 export default store;
