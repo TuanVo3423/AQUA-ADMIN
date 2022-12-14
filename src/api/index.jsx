@@ -12,10 +12,12 @@ export const createProducts = (payload) => {
   return axios.post(`${URL}/products/createPost`, payload);
 };
 
-export const updatePosts = (payload) =>
-  axios.put(`${URL}/products/${payload._id}`, payload);
-export const deleteProducts = (payload) =>
-  axios.delete(`${URL}/products/${payload}`);
+export const updatePosts = (payload) => {
+  return axios.put(`${URL}/products/${payload._id}`, payload);
+};
+export const deleteProducts = (payload) => {
+  return axios.delete(`${URL}/products/${payload}`);
+};
 
 export const getAllUsers = (payload) => {
   return axios.get(`${URL}/users`);

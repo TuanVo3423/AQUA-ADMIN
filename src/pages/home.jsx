@@ -28,6 +28,7 @@ import { SystemReducer } from "../redux/Reducers/System";
 import { useDispatch, useSelector } from "react-redux";
 import EditProduct from "../components/EditProduct";
 import { systemSelector } from "../redux/Selector";
+import { CircleSpinnerOverlay } from "react-spinner-overlay";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -180,6 +181,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(false);
   const { numSelected, selected, listProduct } = props;
   const [isOpenModalEdit, setIsOpenModalEdit] = React.useState(false);
   const [values, setValues] = React.useState({
@@ -193,9 +195,17 @@ const EnhancedTableToolbar = (props) => {
     likeCount: 0,
   });
   const handleDelete = async () => {
+    setIsLoading(true);
     if (selected.length <= 1) {
-      deleteProducts(selected[0]);
-      window.location.reload();
+      deleteProducts(selected[0])
+        .then((res) => {
+          // console.log(res.data);
+          setIsLoading(false);
+          window.location.reload();
+        })
+        .catch((err) => {
+          setIsLoading(true);
+        });
     }
   };
   const handleOpenEditModal = async () => {
@@ -222,60 +232,68 @@ const EnhancedTableToolbar = (props) => {
   // const test = handleOpenEditModal();
   // console.log('test', test);
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          LIST PRODUCT
-        </Typography>
-      )}
+    <div>
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
+          }),
+        }}
+      >
+        {numSelected > 0 ? (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            LIST PRODUCT
+          </Typography>
+        )}
 
-      {numSelected > 0 ? (
-        <div style={{ display: "flex" }}>
-          <Tooltip title="Delete">
-            <IconButton onClick={handleDelete}>
-              <DeleteIcon />
+        {numSelected > 0 ? (
+          <div style={{ display: "flex" }}>
+            <Tooltip title="Delete">
+              <IconButton onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit">
+              <IconButton onClick={handleOpenEditModal}>
+                <ModeEditIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Edit">
-            <IconButton onClick={handleOpenEditModal}>
-              <ModeEditIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        )}
+      </Toolbar>
+      {isLoading && (
+        <CircleSpinnerOverlay
+          loading={isLoading}
+          overlayColor="rgba(0,153,255,0.2)"
+        />
       )}
-    </Toolbar>
+    </div>
   );
 };
 
