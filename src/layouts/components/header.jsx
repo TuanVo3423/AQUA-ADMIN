@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -30,7 +31,7 @@ const drawerWidth = 240;
 
 const data = [
   {
-    title: "View Overall",
+    title: "View Products",
     path: "/",
     icon: <CalendarViewMonthIcon />,
   },
@@ -38,6 +39,11 @@ const data = [
     title: "Create Product",
     path: "/create",
     icon: <CreateNewFolderIcon />,
+  },
+  {
+    title: "View Users",
+    path: "/users",
+    icon: <PeopleOutlineIcon />,
   },
   {
     title: "Chat",
@@ -112,11 +118,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  const DOMAIN = "127.0.0.1";
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const handleSignOut = () => {
     const cookies = new Cookies();
-    cookies.remove("token", { path: "/", domain: "aqua-fe.vercel.app" });
+    cookies.remove("token", { path: "/", domain: DOMAIN });
     window.location.href = FEUI;
   };
 

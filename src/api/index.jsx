@@ -23,6 +23,13 @@ export const getAllUsers = (payload) => {
   return axios.get(`${URL}/users`);
 };
 
+export const updateUser = (payload) => {
+  return axios.put(`${URL}/users/${payload._id}`, payload);
+};
+export const deleteUser = (payload) => {
+  return axios.delete(`${URL}/users/${payload}`);
+};
+
 export const getChatUsers = (payload) => {
   return axios.get(`${URL}/users?id=${payload}`, payload);
 };
