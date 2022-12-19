@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { systemSelector } from "../redux/Selector";
 import { useEffect } from "react";
-import { updatePosts } from "../api";
+import { updateProduct } from "../api";
 import CloseIcon from "@mui/icons-material/Close";
 import { SystemReducer } from "../redux/Reducers/System";
 import { CircleSpinnerOverlay } from "react-spinner-overlay";
@@ -48,7 +48,7 @@ export default function EditProduct() {
   });
   const handleEdit = async () => {
     setIsLoading(true);
-    updatePosts(values)
+    updateProduct(values)
       .then((res) => {
         setIsLoading(false);
         window.location.reload();

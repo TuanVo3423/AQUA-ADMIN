@@ -9,10 +9,10 @@ export const fetchProducts = (payload) => axios.get(`${URL}/admin`);
 
 export const createProducts = (payload) => {
   // console.log("payload : ", payload);
-  return axios.post(`${URL}/products/createPost`, payload);
+  return axios.post(`${URL}/products/createProduct`, payload);
 };
 
-export const updatePosts = (payload) => {
+export const updateProduct = (payload) => {
   return axios.put(`${URL}/products/${payload._id}`, payload);
 };
 export const deleteProducts = (payload) => {
